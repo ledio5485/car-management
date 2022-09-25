@@ -5,6 +5,7 @@ import com.cars.carmanagement.api.Status;
 import com.cars.carmanagement.persistence.CarEntity;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -17,7 +18,8 @@ class CarEntityToCarDTOConverterTest {
     @Test
     void shouldConvertCarEntityToDTO() {
         UUID id = UUID.randomUUID();
-        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
+        long now = System.currentTimeMillis();
+        ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(now), ZoneId.of("UTC"));
         CarEntity entity = new CarEntity();
         entity.setId(id);
         entity.setBrand("Benz");
@@ -30,7 +32,7 @@ class CarEntityToCarDTOConverterTest {
 
         CarDTO actual = converter.convert(entity);
 
-        CarDTO expected = new CarDTO(id, "Benz", "B-12345", "Daimler", "Berlin", Status.AVAILABLE, now, now);
+        CarDTO expected = new CarDTO(id, "Benz", "B-12345", "Daimler", "Berlin", Status.AVAILABLE, dateTime, dateTime);
         assertThat(actual).isEqualTo(expected);
     }
 }

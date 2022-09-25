@@ -7,14 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
-import java.time.ZonedDateTime;
-
 @Component
 @RequiredArgsConstructor
 public class CreateCarCommandToCarEntityConverter implements Converter<CreateCarCommand, CarEntity> {
-    private final Clock clock;
-
     @Override
     public CarEntity convert(CreateCarCommand command) {
         CarEntity car = new CarEntity();
@@ -23,8 +18,6 @@ public class CreateCarCommandToCarEntityConverter implements Converter<CreateCar
         car.setManufacturer(command.manufacturer());
         car.setOperationCity(command.operationCity());
         car.setStatus(Status.valueOf(command.status().name()));
-        car.setCreatedDate(ZonedDateTime.now(clock));
-        car.setLastModifiedDate(ZonedDateTime.now(clock));
 
         return car;
     }

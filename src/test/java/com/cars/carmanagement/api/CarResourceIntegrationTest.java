@@ -47,7 +47,7 @@ class CarResourceIntegrationTest {
             CreateCarCommand command = new CreateCarCommand("Benz", "B-12345", "Daimler", "Berlin", Status.AVAILABLE);
 
             MvcResult mvcResult = mockMvc.perform(post("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                            .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(command)))
                     .andExpect(status().isCreated())
                     .andReturn();
@@ -68,7 +68,7 @@ class CarResourceIntegrationTest {
         @Test
         void shouldGetEmptyCollectionWhenNoCarsAreCreatedYet() throws Exception {
             MvcResult mvcResult = mockMvc.perform(get("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
@@ -88,7 +88,7 @@ class CarResourceIntegrationTest {
             CarDTO car2 = carService.createCar(command2);
 
             MvcResult mvcResult = mockMvc.perform(get("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
@@ -108,7 +108,7 @@ class CarResourceIntegrationTest {
         @DisplayName("should return NOT_FOUND when car does not exist")
         void shouldReturnNotFoundWhenCarDoesNotExist() throws Exception {
             mockMvc.perform(get("/cars/{id}", UUID.randomUUID())
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
         }
 
@@ -119,7 +119,7 @@ class CarResourceIntegrationTest {
             CarDTO expected = carService.createCar(command);
 
             MvcResult mvcResult = mockMvc.perform(get("/cars/{id}", expected.id())
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 

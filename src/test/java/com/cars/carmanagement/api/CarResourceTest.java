@@ -1,6 +1,5 @@
 package com.cars.carmanagement.api;
 
-import com.cars.carmanagement.TestConfig;
 import com.cars.carmanagement.service.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(CarResource.class)
-@Import({TestConfig.class})
 class CarResourceTest {
     private static final ZonedDateTime NOW = ZonedDateTime.now();
 
@@ -49,7 +46,7 @@ class CarResourceTest {
             CreateCarCommand command = new CreateCarCommand("", "B-12345", "Daimler", "Berlin", Status.AVAILABLE);
 
             mockMvc.perform(post("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                            .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(command)))
                     .andExpect(status().isBadRequest());
         }
@@ -63,7 +60,7 @@ class CarResourceTest {
                     .thenReturn(expected);
 
             MvcResult mvcResult = mockMvc.perform(post("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                            .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(command)))
                     .andExpect(status().isCreated())
                     .andReturn();
@@ -83,7 +80,7 @@ class CarResourceTest {
                     .thenReturn(List.of());
 
             MvcResult mvcResult = mockMvc.perform(get("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
@@ -101,7 +98,7 @@ class CarResourceTest {
                     .thenReturn(List.of(car1, car2));
 
             MvcResult mvcResult = mockMvc.perform(get("/cars")
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 
@@ -118,7 +115,7 @@ class CarResourceTest {
         @DisplayName("should return NOT_FOUND when car does not exist")
         void shouldReturnNotFoundWhenCarDoesNotExist() throws Exception {
             mockMvc.perform(get("/cars/{id}", UUID.randomUUID())
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
         }
 
@@ -131,7 +128,7 @@ class CarResourceTest {
                     .thenReturn(Optional.of(expectedCar));
 
             MvcResult mvcResult = mockMvc.perform(get("/cars/{id}", expectedCar.id())
-                            .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andReturn();
 

@@ -5,16 +5,10 @@ import com.cars.carmanagement.api.Status;
 import com.cars.carmanagement.persistence.CarEntity;
 import org.junit.jupiter.api.Test;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CreateCarCommandToCarEntityConverterTest {
-    private final Clock clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
-    private final CreateCarCommandToCarEntityConverter converter = new CreateCarCommandToCarEntityConverter(clock);
+    private final CreateCarCommandToCarEntityConverter converter = new CreateCarCommandToCarEntityConverter();
 
     @Test
     void shouldConvertCommandToCarEntity() {
@@ -28,8 +22,6 @@ class CreateCarCommandToCarEntityConverterTest {
         expected.setManufacturer("Daimler");
         expected.setOperationCity("Berlin");
         expected.setStatus(com.cars.carmanagement.persistence.Status.AVAILABLE);
-        expected.setCreatedDate(ZonedDateTime.now(clock));
-        expected.setLastModifiedDate(ZonedDateTime.now(clock));
         assertThat(actual).isEqualTo(expected);
     }
 }

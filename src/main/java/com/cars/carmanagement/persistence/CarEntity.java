@@ -1,12 +1,15 @@
 package com.cars.carmanagement.persistence;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "CAR")
 @Data
 public class CarEntity {
@@ -19,6 +22,8 @@ public class CarEntity {
     private String manufacturer;
     private String operationCity;
     private Status status;
-    private ZonedDateTime createdDate;
-    private ZonedDateTime lastModifiedDate;
+    @CreatedDate
+    private long createdDate;
+    @LastModifiedDate
+    private long lastModifiedDate;
 }
